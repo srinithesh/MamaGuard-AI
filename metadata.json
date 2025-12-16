@@ -1,0 +1,8 @@
+{
+  "name": "MamaGuard AI",
+  "description": "An intelligent pregnancy safety system that detects distress via voice, monitors activity, and automates emergency escalation.",
+  "requestFramePermissions": [
+    "microphone",
+    "geolocation"
+  ]
+}
