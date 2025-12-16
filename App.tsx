@@ -14,7 +14,13 @@ export default function App() {
   const [activeView, setActiveView] = useState<'DASHBOARD' | 'REMINDERS' | 'MAP'>('DASHBOARD');
   const [userRole, setUserRole] = useState<ViewRole>('USER'); // Simulation Toggle
   
-  const [location, setLocation] = useState<LocationData>({ latitude: 0, longitude: 0, address: "123 Maple Ave, Springfield" });
+  // Default to NYC coordinates for a nice initial map view instead of ocean
+  const [location, setLocation] = useState<LocationData>({ 
+      latitude: 40.7128, 
+      longitude: -74.0060, 
+      address: "123 Maple Ave, Springfield" 
+  });
+  
   const [contacts, setContacts] = useState<Contact[]>([
     { id: '1', name: 'Alex (Husband)', role: 'Husband', status: 'Unknown', phone: '123-456-7890' },
     { id: '2', name: 'Dr. Sarah', role: 'Doctor', status: 'Unknown', phone: '987-654-3210' },

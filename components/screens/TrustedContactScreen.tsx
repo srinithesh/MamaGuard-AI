@@ -1,5 +1,6 @@
 import React from 'react';
 import { Contact, SystemStatus, LocationData } from '../../types';
+import { LeafletMap } from '../LeafletMap';
 
 interface Props {
   contactName: string; // The logged in contact
@@ -31,15 +32,18 @@ export const TrustedContactScreen: React.FC<Props> = ({
   let headerBg = 'bg-[#66BB6A]'; // Safe
   let headerText = 'text-white';
   let statusLabel = 'SAFE';
+  let markerColor = '#66BB6A';
 
   if (isPending) {
     headerBg = 'bg-[#FFD180]'; // Risk
     headerText = 'text-[#5D4037]';
     statusLabel = 'RISK DETECTED';
+    markerColor = '#FFA726';
   } else if (isEmergency) {
     headerBg = 'bg-[#E53935]'; // Emergency
     headerText = 'text-white';
     statusLabel = 'EMERGENCY';
+    markerColor = '#E53935';
   }
 
   return (
@@ -102,14 +106,12 @@ export const TrustedContactScreen: React.FC<Props> = ({
 
       {/* 3. Map Area */}
       <div className="flex-1 relative bg-gray-200 overflow-hidden -mt-10 pt-10">
-        {/* Placeholder Map */}
-        <div className="absolute inset-0 opacity-60" 
-             style={{
-                 backgroundImage: 'linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px)', 
-                 backgroundSize: '20px 20px',
-                 backgroundColor: '#e5e7eb'
-             }}>
-        </div>
+        {/* Real Leaflet Map */}
+        <LeafletMap 
+            center={{ lat: location.latitude, lng: location.longitude }}
+            markerColor={markerColor}
+            markerPulseColor={markerColor}
+        />
         
         {/* Response Timer Overlay */}
         {isPending && (
@@ -123,14 +125,10 @@ export const TrustedContactScreen: React.FC<Props> = ({
              </div>
         )}
 
-        {/* Marker */}
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
-             <div className="relative">
-                 <div className={`w-6 h-6 rounded-full border-4 border-white shadow-xl z-10 relative ${!isSafe ? 'bg-[#E53935]' : 'bg-[#66BB6A]'}`}></div>
-                 <div className={`absolute inset-0 rounded-full animate-ping opacity-50 ${!isSafe ? 'bg-[#E53935] w-20 h-20 -top-7 -left-7' : 'bg-[#66BB6A] w-12 h-12 -top-3 -left-3'}`}></div>
-             </div>
-             <div className="mt-4 bg-white/90 backdrop-blur px-3 py-1.5 rounded-lg shadow-sm text-[10px] font-bold text-[#5D4037] border border-white/50">
-                {location.address || "123 Main St"}
+        {/* Address Badge (Overlays map) */}
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 translate-y-8 flex flex-col items-center pointer-events-none">
+             <div className="mt-8 bg-white/90 backdrop-blur px-3 py-1.5 rounded-lg shadow-sm text-[10px] font-bold text-[#5D4037] border border-white/50">
+                {location.address || "Updating address..."}
              </div>
         </div>
       </div>

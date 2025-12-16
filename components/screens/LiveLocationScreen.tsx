@@ -1,5 +1,6 @@
 import React from 'react';
 import { LocationData } from '../../types';
+import { LeafletMap } from '../LeafletMap';
 
 interface Props {
   location: LocationData;
@@ -14,16 +15,11 @@ export const LiveLocationScreen: React.FC<Props> = ({ location, onBack }) => {
         </button>
 
         <div className="flex-1 relative">
-            {/* Mock Map */}
-            <div className="absolute inset-0 bg-[#FFF8E1]" 
-                 style={{backgroundImage: 'radial-gradient(#FFD180 1px, transparent 1px)', backgroundSize: '20px 20px'}}>
-            </div>
-
-            {/* Central Marker (User) */}
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                <div className="w-6 h-6 bg-[#FFAB91] border-4 border-white rounded-full shadow-xl"></div>
-                <div className="w-32 h-32 bg-[#FFAB91] rounded-full opacity-20 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 animate-pulse"></div>
-            </div>
+            {/* Real Map */}
+            <LeafletMap 
+                center={{ lat: location.latitude, lng: location.longitude }}
+                markerColor="#FFAB91" // Mom's color
+            />
         </div>
 
         <div className="bg-white p-6 rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.1)] z-10">
