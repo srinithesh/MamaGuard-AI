@@ -8,8 +8,6 @@ import { SmartReminderScreen } from './components/screens/SmartReminderScreen';
 import { TrustedContactScreen } from './components/screens/TrustedContactScreen';
 import { LiveLocationScreen } from './components/screens/LiveLocationScreen';
 
-const DANGER_TIMEOUT_MS = 15000; // 15 seconds pending before escalation
-
 export default function App() {
   // --- Global State ---
   const [status, setStatus] = useState<SystemStatus>(SystemStatus.IDLE);
@@ -21,7 +19,11 @@ export default function App() {
     { id: '1', name: 'Alex (Husband)', role: 'Husband', status: 'Unknown', phone: '123-456-7890' },
     { id: '2', name: 'Dr. Sarah', role: 'Doctor', status: 'Unknown', phone: '987-654-3210' },
   ]);
-  const [pendingTimer, setPendingTimer] = useState(DANGER_TIMEOUT_MS / 1000);
+  
+  // Settings
+  const [escalationDelay, setEscalationDelay] = useState(45); // Default 45 seconds
+  
+  const [pendingTimer, setPendingTimer] = useState(escalationDelay);
   const [emergencyType, setEmergencyType] = useState<EmergencyType>(null);
   const [hasPermission, setHasPermission] = useState(false);
 
@@ -50,8 +52,8 @@ export default function App() {
     console.log("Triggering Pending State:", type);
     setStatus(SystemStatus.PENDING);
     setEmergencyType(type);
-    setPendingTimer(DANGER_TIMEOUT_MS / 1000);
-  }, [status]);
+    setPendingTimer(escalationDelay); // Reset to configured delay
+  }, [status, escalationDelay]);
 
   const triggerEscalation = useCallback(() => {
     setStatus(SystemStatus.EMERGENCY);
@@ -168,6 +170,8 @@ export default function App() {
                     onOpenReminders={() => setActiveView('REMINDERS')}
                     onViewMap={() => setActiveView('MAP')}
                     contacts={contacts}
+                    escalationDelay={escalationDelay}
+                    setEscalationDelay={setEscalationDelay}
                 />
             );
     }

@@ -114,8 +114,11 @@ export const TrustedContactScreen: React.FC<Props> = ({
         {/* Response Timer Overlay */}
         {isPending && (
              <div className="absolute top-14 left-0 right-0 flex justify-center z-30 pointer-events-none">
-                <div className="bg-[#E53935] text-white px-5 py-2 rounded-full shadow-xl animate-pulse font-bold text-sm flex items-center gap-2 border-2 border-white">
-                    <span>⏳</span> Auto-escalation in: {Math.ceil(pendingSeconds)}s
+                <div className="bg-[#E53935] text-white px-5 py-3 rounded-2xl shadow-xl animate-pulse font-bold text-sm flex flex-col items-center gap-1 border-2 border-white text-center">
+                    <span className="uppercase text-[10px] tracking-widest opacity-90">Waiting for your confirmation</span>
+                    <div className="flex items-center gap-2 text-lg">
+                        <span>⏳</span> Auto-escalation in: {Math.ceil(pendingSeconds)}s
+                    </div>
                 </div>
              </div>
         )}
