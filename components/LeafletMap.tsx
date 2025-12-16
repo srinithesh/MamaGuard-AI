@@ -35,13 +35,22 @@ export const LeafletMap: React.FC<Props> = ({
         zoomControl: false,
         attributionControl: false,
         dragging: true,
-        scrollWheelZoom: true
+        scrollWheelZoom: true,
+        fadeAnimation: true
       }).setView([center.lat, center.lng], zoom);
 
-      // Use CartoDB Voyager tiles for a clean, modern look that matches the app better than standard OSM
+      // Use CartoDB Voyager tiles for a clean, modern look
       window.L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
         maxZoom: 20
       }).addTo(mapInstance.current);
+      
+      // CRITICAL FIX: Force Leaflet to recalculate container size
+      // This fixes the "grey area" issue where tiles don't load because the container
+      // height wasn't fully determined when the map initialized.
+      setTimeout(() => {
+         mapInstance.current?.invalidateSize();
+      }, 250);
+
     } else {
         // Smooth fly to new location
         mapInstance.current.flyTo([center.lat, center.lng], zoom, {
@@ -75,5 +84,6 @@ export const LeafletMap: React.FC<Props> = ({
 
   }, [center.lat, center.lng, zoom, markerColor, pulseColor]);
 
-  return <div ref={mapRef} className="w-full h-full absolute inset-0 z-0" />;
+  // Use explicit zIndex 0 to keep map in background
+  return <div ref={mapRef} className="w-full h-full absolute inset-0 outline-none" style={{ zIndex: 0 }} />;
 };

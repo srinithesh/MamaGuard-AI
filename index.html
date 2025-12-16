@@ -59,12 +59,13 @@
         background: #FFAB91; 
       }
 
-      /* Map z-index fix */
-      .leaflet-pane {
-        z-index: 0 !important;
-      }
-      .leaflet-control-container {
+      /* Map controls styling */
+      .leaflet-control-container .leaflet-top {
         display: none; /* Hide default zoom controls for cleaner UI */
+      }
+      /* Ensure map container is behind other UI elements but functional */
+      #map {
+        z-index: 0;
       }
     </style>
   <script type="importmap">
