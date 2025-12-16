@@ -123,6 +123,7 @@ export default function App() {
                 systemStatus={status}
                 location={location}
                 lastUpdate="Just now"
+                pendingSeconds={pendingTimer}
                 onConfirmSafe={() => resolveEmergency("Confirmed Safe by Contact")}
                 onConfirmDanger={triggerEscalation}
             />
