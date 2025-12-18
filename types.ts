@@ -11,7 +11,8 @@ export type ViewRole = 'USER' | 'CONTACT'; // Role-based view switching
 export interface Contact {
   id: string;
   name: string;
-  role: 'Husband' | 'Doctor' | 'Parent';
+  // Added 'Mother' role to fix type error in App.tsx line 26
+  role: 'Husband' | 'Doctor' | 'Parent' | 'Mother';
   status: 'Unknown' | 'Safe' | 'Danger' | 'EnRoute';
   phone: string;
 }
@@ -33,7 +34,8 @@ export type EmergencyType = 'Voice' | 'Fall' | 'Manual' | null;
 export interface Reminder {
   id: string;
   text: string;
-  time: string;
+  description: string;
+  timeLabel: string;
   completed: boolean;
-  type: 'MEDICINE' | 'FOOD' | 'WATER';
+  type: 'MEDICINE' | 'FOOD' | 'WATER' | 'REST' | 'EXERCISE';
 }

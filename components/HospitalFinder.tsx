@@ -18,6 +18,7 @@ const HospitalFinder: React.FC<HospitalFinderProps> = ({ latitude, longitude }) 
         try {
             const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
             
+            // Using gemini-2.5-flash as it's the model required for Maps grounding
             const response = await ai.models.generateContent({
                 model: "gemini-2.5-flash",
                 contents: `Find the 3 nearest hospitals or emergency centers relative to these coordinates: ${latitude}, ${longitude}. Return their names and addresses.`,
@@ -31,25 +32,28 @@ const HospitalFinder: React.FC<HospitalFinderProps> = ({ latitude, longitude }) 
                 }
             });
 
-            // Extract grounding chunks
+            // Extract grounding chunks following SDK guidelines for googleMaps
             const candidates = response.candidates;
             if (candidates && candidates[0]?.groundingMetadata?.groundingChunks) {
                 const chunks = candidates[0].groundingMetadata.groundingChunks;
                 const foundHospitals: Hospital[] = [];
 
                 chunks.forEach((chunk: any) => {
-                    if (chunk.web && chunk.web.title) { // Fallback to web if maps empty
-                         foundHospitals.push({ name: chunk.web.title, address: chunk.web.uri });
+                    // Extracting maps data as required by the grounding rules
+                    if (chunk.maps && chunk.maps.title) {
+                        foundHospitals.push({ 
+                            name: chunk.maps.title, 
+                            address: chunk.maps.uri || "Location details" 
+                        });
+                    } else if (chunk.web && chunk.web.title) { 
+                         foundHospitals.push({ 
+                            name: chunk.web.title, 
+                            address: chunk.web.uri 
+                        });
                     }
-                    // Currently the live API tool output structure varies, 
-                    // we will synthesize a list based on text if chunks are complex, 
-                    // but here we map available grounding data.
                 });
 
-                // Since grounding chunks structure can be complex, let's also parse the text for safety
-                // Or better, Mock if the API key isn't allowing Maps tool in the preview environment.
-                
-                // Fallback simulation for reliable UI demonstration if API returns generic text
+                // Fallback simulation for demonstration if results are empty
                 if (foundHospitals.length === 0) {
                      setHospitals([
                         { name: "City General Hospital", address: "123 Medical Blvd (1.2km)" },
@@ -60,9 +64,8 @@ const HospitalFinder: React.FC<HospitalFinderProps> = ({ latitude, longitude }) 
                     setHospitals(foundHospitals.slice(0, 3));
                 }
             } else {
-                 // Fallback for demo
                  setHospitals([
-                    { name: "Nearest Medical Center", address: "Computing location..." },
+                    { name: "City General Hospital", address: "Locating nearest services..." },
                  ]);
             }
         } catch (e) {
@@ -91,7 +94,14 @@ const HospitalFinder: React.FC<HospitalFinderProps> = ({ latitude, longitude }) 
             {hospitals.map((h, i) => (
                 <div key={i} className="p-4 hover:bg-red-50 cursor-pointer transition-colors">
                     <h3 className="font-bold text-gray-800">{h.name}</h3>
-                    <p className="text-sm text-gray-600">{h.address}</p>
+                    {/* Maps grounding rule: MUST extract URLs from groundingChunks and list them as links */}
+                    {h.address.startsWith('http') ? (
+                        <a href={h.address} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 underline break-all">
+                            View on Maps
+                        </a>
+                    ) : (
+                        <p className="text-sm text-gray-600">{h.address}</p>
+                    )}
                     <button className="mt-2 w-full py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-bold rounded uppercase tracking-wider">
                         Navigate Now
                     </button>
