@@ -34,7 +34,8 @@ export default function App() {
   const [hasPermission, setHasPermission] = useState(false);
 
   // --- Logic Refs ---
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  // Fix: Replaced NodeJS.Timeout with any to resolve "Cannot find namespace 'NodeJS'" error in browser environment
+  const timerRef = useRef<any>(null);
 
   // --- Initialization ---
   const startSystem = async () => {

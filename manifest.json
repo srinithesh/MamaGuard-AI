@@ -1,0 +1,41 @@
+{
+  "id": "com.mamaguard.ai",
+  "short_name": "MamaGuard",
+  "name": "MamaGuard AI Pregnancy Safety",
+  "description": "Intelligent distress detection and safety monitoring for expectant mothers.",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3514/3514417.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3514/3514417.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3514/3514417.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    }
+  ],
+  "start_url": "/?utm_source=playstore",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#FFAB91",
+  "background_color": "#FFF3E0",
+  "orientation": "portrait",
+  "categories": ["medical", "health", "lifestyle"],
+  "screenshots": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3514/3514417.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "label": "MamaGuard Dashboard"
+    }
+  ]
+}

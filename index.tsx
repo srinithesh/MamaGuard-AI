@@ -1,6 +1,20 @@
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+
+// Register Service Worker for PWA / Installation support
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.ts')
+      .then(registration => {
+        console.log('MamaGuard PWA ServiceWorker registered: ', registration.scope);
+      })
+      .catch(error => {
+        console.log('ServiceWorker registration failed: ', error);
+      });
+  });
+}
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
